@@ -651,7 +651,51 @@ When a tenant specific ops logs on to grafana , they will see the daasource crea
 
 6. Configure Prometheus metrics
 
-![Tenant Logs Explore](./readme_assets/prometheus.png)
+![Prometheus Metrics](./readme_assets/prometheus.png)
+
+![Prometheus Metrics](./readme_assets/metrics-dashboard.png)
+
+
+## All Commands
+
+```shell
+kubectl create namespace grafana
+
+kubectl apply -f 03_yaml/grafana-pv-pvc-minikube.yaml --namespace grafana
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+
+helm repo update
+
+helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+
+kubectl create secret tls grafana-ingress-tls --key 02_tls/grafana_tls/grafana-key.pem --cert 02_tls/grafana_tls/grafana.pem --namespace grafana  
+
+helm repo add grafana https://grafana.github.io/helm-charts
+
+helm repo update
+
+helm upgrade --install grafana grafana/grafana --values 03_yaml/grafana-values.yaml --namespace grafana --create-namespace
+
+helm upgrade --install loki grafana/loki --values 03_yaml/loki-values.yaml --namespace grafana --create-namespace
+
+helm upgrade --install promtail grafana/promtail --values 03_yaml/promtail-values.yaml --namespace grafana
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm repo update
+
+helm upgrade --install prometheus prometheus-community/prometheus
+
+kubectl patch ds prometheus-node-exporter --type "json" -p '[{"op": "remove", "path" : "/spec/template/spec/containers/0/volumeMounts/2/mountPropagation"}]'
+
+kubectl create namespace imageapi
+
+kubectl create secret tls imageapi-ingress-tls --key 02_tls/imageapi_tls/imageapi-key.pem --cert 02_tls/imageapi_tls/imageapi.pem --namespace imageapi
+
+kubectl apply -f 03_yaml/imageapi.yaml --namespace imageapi
+
+```
 
 
 ## Clean up
