@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.malcolm.imageapi</groupId>
+	<artifactId>imageapi</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>imageapi</name>
+	<description>Image API</description>
+
+	<properties>
+		<final.jar.name>imageapi</final.jar.name>
+
+		<!-- Maven Jib Plugin -->
+		<jib.plugin.version>3.2.1</jib.plugin.version>
+		<service.base.image>amazoncorretto:11.0.15@sha256:924d41b1fb82124b639d42e4638ceb69ed2c0374ab6e1f5b1e912b13bc85067c</service.base.image>
+		<service.image.tag>v1.0.0</service.image.tag>
+		<service.image.name>malcolmpereira/imageapi:1.0.0</service.image.name>
+		<service.container.port>8080</service.container.port>
+		
+		<java.version>11</java.version>
+		<servlet.version>3.1.0</servlet.version>
+		<servlet.jsp.version>2.3.3</servlet.jsp.version>
+		<java.xml.bind.version>2.3.1</java.xml.bind.version>
+		
+		<!-- Spring Boot / Spring Version -->
+		<spring.boot.version>2.6.6</spring.boot.version>
+
+		<!-- Open API Documentation-->
+		<springdoc.openapi.version>1.6.6</springdoc.openapi.version>
+
+		<!-- Lombok Version -->
+		<lombok.version>1.18.22</lombok.version>
+
+		<!--Log4J2 Version -->
+		<log4j2.version>2.17.1</log4j2.version>
+
+		<!-- Common Imaging Version -->
+		<commons-imaging.version>1.0-alpha2</commons-imaging.version>
+
+		<!-- Jackson Core Version -->
+		<jackson.core.version>2.13.2</jackson.core.version>
+
+		<!-- Testing Dependencies -->
+		<junit.jupiter.verion>5.7.2</junit.jupiter.verion>
+		<json.path.verion>2.6.0</json.path.verion>
+		<spotbugs.version>4.3.0</spotbugs.version>
+		<findsecbugs.version>1.11.0</findsecbugs.version>
+		
+		<!-- Maven Compiler Options and Project Encoding -->
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<mvn.compiler.version>3.8.1</mvn.compiler.version>
+		<maven-site-plugin>3.10.0</maven-site-plugin>
+		<maven-pmd-plugin>3.14.0</maven-pmd-plugin>
+		<maven-surefire-plugin>2.22.2</maven-surefire-plugin>
+		<maven-project-info-plugin>3.1.2</maven-project-info-plugin>
+		<maven-jxr-plugin>3.1.1</maven-jxr-plugin>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring.boot.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency> 
+			<groupId>org.springframework.boot</groupId>  
+			<artifactId>spring-boot-starter-jetty</artifactId>  
+			<version>${spring.boot.version}</version> 
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<version>${spring.boot.version}</version>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc.openapi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring.boot.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jul</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-layout-template-json</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-imaging</artifactId>
+			<version>${commons-imaging.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+				<configuration>
+					<mainClass>com.malcolm.imageapi.ImageAPIApp</mainClass>
+					<layout>JAR</layout>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>${jib.plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>dockerBuild</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<to>
+						<image>${service.image.name}</image>
+					</to>
+					<from>
+						<image>${service.base.image}</image>
+					</from>
+					<container>
+						<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+						<jvmFlags>
+							<jvmFlag>-server</jvmFlag>
+							<jvmFlag>-Xms64m</jvmFlag>
+						</jvmFlags>
+						<ports>
+							<port>${service.container.port}</port>
+						</ports>
+					</container>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

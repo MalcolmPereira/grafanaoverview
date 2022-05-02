@@ -1,0 +1,29 @@
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  path: /?(.*)
+  hosts:
+    - grafana.malcolm.io
+  tls:
+    - hosts:
+        - grafana.malcolm.io
+      secretName: grafana-ingress-tls
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 750m
+    memory: 750Mi
+persistence:
+  enabled: true
+  type: pvc
+  accessModes:
+    - ReadWriteOnce
+  existingClaim: grafana-volume-claim
+grafana.ini:
+  server:
+    root_url: http://localhost:3000 # this host can be localhost

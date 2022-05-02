@@ -1,0 +1,20 @@
+{
+    "CN": "grafana.malcolm.io",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "USA",
+            "L": "Auburn",
+            "O": "Image API",
+            "OU": "Image API",
+            "ST": "WA"
+        }
+    ],
+    "hosts": [
+        "grafana.malcolm.io",
+        "localhost"
+    ]
+}

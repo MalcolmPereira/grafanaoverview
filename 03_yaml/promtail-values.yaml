@@ -1,0 +1,42 @@
+extraArgs:
+  - -print-config-stderr=true
+config:
+  logLevel: debug
+  lokiAddress: http://loki.grafana.svc.cluster.local:3100/loki/api/v1/push
+  snippets:
+    pipelineStages:
+      - match:
+          selector: '{app!="imageapi"}'
+          stages:
+            - tenant:
+                value: admin
+      - match:
+          selector: '{app="imageapi"}'
+          stages:
+            - json:
+                expressions:
+                  output: log
+            - json:
+                source: output
+                expressions:
+                  tenant_id: TENANT_ID
+                  message: message
+                  trace_id: TRACE_ID
+                  request_id: REQUEST_ID
+                  logger_name: logger_name
+                  level: log.level
+                  className: source.className
+                  methodName: source.methodName
+                  error_message: error.message
+                  error_trace: error.stack_trace
+            - labels:
+                tenant_id:
+                message:
+                trace_id:
+                request_id:
+                className:
+                methodName:
+                error_message:
+                error_trace:
+            - tenant:
+                source: tenant_id

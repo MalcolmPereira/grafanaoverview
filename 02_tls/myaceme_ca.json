@@ -1,0 +1,16 @@
+{
+    "CN": "MYACME Root CA",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "USA",
+            "L": "Auburn",
+            "O": "Image API Root CA",
+            "OU": "Image API Root CA",
+            "ST": "WA"
+        }
+    ]
+}

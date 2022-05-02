@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="30">
+  <Appenders>
+	<Console name="STDOUT" target="SYSTEM_OUT">
+      <!--
+      <PatternLayout pattern="[%-5p],[%28d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}],[%T],[TRACE-ID=%X{TRACE-ID}],[REQUEST-ID=%X{REQUEST-ID}],[%c],%m,%n"/>
+      -->
+      <JsonTemplateLayout locationInfoEnabled="true" eventTemplateUri="classpath:EcsLayout.json">
+          <EventTemplateAdditionalField key="source" format="JSON" value='{"className": {"$resolver": "source", "field": "className"},"methodName":{"$resolver": "source", "field": "methodName"},"fileName" : {"$resolver": "source", "field": "fileName"},"lineNumber":{"$resolver": "source", "field": "lineNumber"}}'/>
+      </JsonTemplateLayout>
+    </Console>
+  </Appenders>
+  <Loggers>
+  	<Logger name="org.springframework" additivity="false" level="INFO"><AppenderRef ref="STDOUT"/></Logger>
+    <Logger name="org.eclipse.jetty" additivity="false" level="INFO"><AppenderRef ref="STDOUT"/></Logger>
+    <Logger name="com.malcolm.imageapi" additivity="false" level="DEBUG"><AppenderRef ref="STDOUT"/></Logger>
+    <Root level="DEBUG">
+  	   <AppenderRef ref="STDOUT"/>
+    </Root>
+  </Loggers>
+</Configuration>
