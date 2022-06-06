@@ -13,9 +13,9 @@
 
 		<!-- Maven Jib Plugin -->
 		<jib.plugin.version>3.2.1</jib.plugin.version>
-		<service.base.image>amazoncorretto:11.0.15@sha256:924d41b1fb82124b639d42e4638ceb69ed2c0374ab6e1f5b1e912b13bc85067c</service.base.image>
+		<service.base.image>amazoncorretto:11.0.15</service.base.image>
 		<service.image.tag>v1.0.0</service.image.tag>
-		<service.image.name>malcolmpereira/imageapi:1.0.0</service.image.name>
+		<service.image.name>malcolmpereira/imageapi:1.1.0</service.image.name>
 		<service.container.port>8080</service.container.port>
 		
 		<java.version>11</java.version>
@@ -24,22 +24,22 @@
 		<java.xml.bind.version>2.3.1</java.xml.bind.version>
 		
 		<!-- Spring Boot / Spring Version -->
-		<spring.boot.version>2.6.6</spring.boot.version>
+		<spring.boot.version>2.7.0</spring.boot.version>
 
 		<!-- Open API Documentation-->
-		<springdoc.openapi.version>1.6.6</springdoc.openapi.version>
+		<springdoc.openapi.version>1.6.8</springdoc.openapi.version>
 
 		<!-- Lombok Version -->
-		<lombok.version>1.18.22</lombok.version>
+		<lombok.version>1.18.24</lombok.version>
 
 		<!--Log4J2 Version -->
-		<log4j2.version>2.17.1</log4j2.version>
+		<log4j2.version>2.17.2</log4j2.version>
 
 		<!-- Common Imaging Version -->
 		<commons-imaging.version>1.0-alpha2</commons-imaging.version>
 
 		<!-- Jackson Core Version -->
-		<jackson.core.version>2.13.2</jackson.core.version>
+		<jackson.core.version>2.13.3</jackson.core.version>
 
 		<!-- Testing Dependencies -->
 		<junit.jupiter.verion>5.7.2</junit.jupiter.verion>
@@ -144,60 +144,131 @@
 			<artifactId>commons-imaging</artifactId>
 			<version>${commons-imaging.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-registry-prometheus</artifactId>
-			<version>1.8.5</version>
-		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${spring.boot.version}</version>
-				<configuration>
-					<mainClass>com.malcolm.imageapi.ImageAPIApp</mainClass>
-					<layout>JAR</layout>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>jib-maven-plugin</artifactId>
-				<version>${jib.plugin.version}</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>dockerBuild</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<to>
-						<image>${service.image.name}</image>
-					</to>
-					<from>
-						<image>${service.base.image}</image>
-					</from>
-					<container>
-						<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
-						<jvmFlags>
-							<jvmFlag>-server</jvmFlag>
-							<jvmFlag>-Xms64m</jvmFlag>
-						</jvmFlags>
-						<ports>
-							<port>${service.container.port}</port>
-						</ports>
-					</container>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<profiles>
+		<!--Docker Build uses the default platform for building images -->
+		<profile>
+			<id>buildDocker</id>
+			<activation>
+					<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<version>${spring.boot.version}</version>
+						<configuration>
+							<mainClass>com.malcolm.imageapi.ImageAPIApp</mainClass>
+							<layout>JAR</layout>
+							<excludes>
+								<exclude>
+									<groupId>org.projectlombok</groupId>
+									<artifactId>lombok</artifactId>
+								</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<version>${jib.plugin.version}</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>dockerBuild</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<from>
+								<image>${service.base.image}</image>
+							</from>
+							<to>
+								<image>${service.image.name}</image>
+							</to>
+							<container>
+								<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+								<jvmFlags>
+									<jvmFlag>-server</jvmFlag>
+									<jvmFlag>-Xms64m</jvmFlag>
+								</jvmFlags>
+								<ports>
+									<port>${service.container.port}</port>
+								</ports>
+							</container>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!--Push to Docker Hub for different platforms -->
+		<profile>
+			<id>build</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<version>${spring.boot.version}</version>
+						<configuration>
+							<mainClass>com.malcolm.imageapi.ImageAPIApp</mainClass>
+							<layout>JAR</layout>
+							<excludes>
+								<exclude>
+									<groupId>org.projectlombok</groupId>
+									<artifactId>lombok</artifactId>
+								</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<version>${jib.plugin.version}</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<from>
+								<image>${service.base.image}</image>
+								<platforms>
+									<platform>
+										<architecture>amd64</architecture>
+										<os>linux</os>
+									</platform>
+									<platform>
+										<architecture>arm64</architecture>
+										<os>linux</os>
+									</platform>
+								</platforms>
+							</from>
+							<to>
+								<image>${service.image.name}</image>
+							</to>
+							<container>
+								<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+								<jvmFlags>
+									<jvmFlag>-server</jvmFlag>
+									<jvmFlag>-Xms64m</jvmFlag>
+								</jvmFlags>
+								<ports>
+									<port>${service.container.port}</port>
+								</ports>
+							</container>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
