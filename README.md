@@ -107,7 +107,6 @@ Now that we have a fair understanding about use case, we will perform the follow
   
 - Access and Configure Dashboards
 
-- Visual and Monitor
 
 Please do not be alarmed with so many install steps we leverage [Helm](https://helm.sh) charts so they are just one liners.
 
