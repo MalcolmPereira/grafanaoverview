@@ -1,3 +1,16 @@
+auth_enabled: true
+
+loki:
+  commonConfig:
+    replication_factor: 1
+
+  persistence:
+    enabled: true
+    type: pvc
+    accessModes:
+      - ReadWriteOnce
+    existingClaim: loki-volume-claim  
+
 resources:
   requests:
     cpu: 250m
@@ -5,11 +18,23 @@ resources:
   limits:
     cpu: 750m
     memory: 750Mi
-persistence:
-  enabled: true
-  type: pvc
-  accessModes:
-    - ReadWriteOnce
-  existingClaim: loki-volume-claim
-config:
-  auth_enabled: true
+
+analytics:
+  reporting_enabled: false
+
+test:
+  enabled: false
+
+monitoring:
+  selfMonitoring:
+      enabled: false
+      grafanaAgent:
+        installOperator: false
+
+  serviceMonitor:
+      enabled: false
+      metricsInstance:
+        enabled: false    
+
+  lokiCanary:
+      enabled: false       
