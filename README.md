@@ -531,8 +531,8 @@ TEST SUITE: None
 NOTES:
 ***********************************************************************
  Welcome to Grafana Promtail
- Chart version: 4.2.0
- Promtail version: 2.5.0
+ Chart version: 6.8.2
+ Promtail version: 2.7.2
 ***********************************************************************
 
 Verify the application is working by running these commands:
