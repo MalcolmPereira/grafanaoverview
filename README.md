@@ -206,7 +206,7 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 helm repo update
 
-##Grafana Version 1.6.1, Helm Chart Version 4.4.3
+##Ingress-NGINX Version 1.6.1, Helm Chart Version 4.4.3
 helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --version 4.4.3 --namespace ingress-nginx --create-namespace
 
 ```
@@ -473,7 +473,8 @@ Please note overide "03_yaml/promtail-values.yaml", This where the multi tenant 
 This specifices location of the loki service
 
 ```yaml
-lokiAddress: http://loki.grafana.svc.cluster.local:3100/loki/api/v1/push
+clients:
+- url: http://loki.grafana.svc.cluster.local:3100/loki/api/v1/push
 ```
 
 The pipelines stages contains the stages to parse the json log message and extract the tenant information.
