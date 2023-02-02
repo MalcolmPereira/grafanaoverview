@@ -154,27 +154,30 @@ namespace/grafana created
 kubectl apply -f 03_yaml/grafana-pv-pvc-minikube.yaml --namespace grafana
 
 persistentvolumeclaim/grafana-volume-claim created
-persistentvolumeclaim/loki-volume-claim created
 ```
 
 Confirm that the PV and PVC are created and bound.
 
 ```shell
 kubectl get pv -A
-```
 
-![Image API Metrics](./readme_assets/pv.png)
+NAME             CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                          STORAGECLASS   REASON   AGE
+grafana-volume   5Gi        RWO            Retain           Bound    grafana/grafana-volume-claim   Standard                9s
+
+```
 
 ```shell
 kubectl get pvc -A
-```
 
-![Image API Metrics](./readme_assets/pvc.png)
+NAMESPACE   NAME                   STATUS   VOLUME           CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+grafana     grafana-volume-claim   Bound    grafana-volume   5Gi        RWO             Standard      59s
+
+```
 
 Storage YAML files:
 
 - grafana-pv-pvc-minikube.yaml
-  - Persistent Volume Claim when running in Minikubem uses dynamic storage provisioning.
+  - Persistent Volume Claim when running in Minikube uses dynamic storage provisioning.
 
 - grafana-pv-pvc-dockerdesktop.yaml
   - Persistent Volume and Persistent Volume Claim when running in DockerDesktop on Mac volume needs to be provisioned in DockerDestop under preferences, resources, file sharing first.
