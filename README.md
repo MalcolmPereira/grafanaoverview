@@ -6,6 +6,14 @@ Simple walk through to get up and running with Grafana/Loki on a kubernetes clus
 
 Show me the code.
 
+## Versions
+
+Ingress-NGINX: 1.6.1
+Grafana: 9.3.6
+Grafana Loki: 2.7.2
+Grafana Promtail: 2.7.2
+Prometheus: v2.41.0
+
 ## Grafana and Loki
 
 [Grafana Labs](https://grafana.com) is a visualization platform for encompassing observability across all application stacks. Grafana is a one stop solution for end to end observability stack and widely used across enterprises.
@@ -195,7 +203,9 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 helm repo update
 
-helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+##Grafana Version 1.6.1, Helm Chart Version 4.4.3
+helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --version 4.4.3 --namespace ingress-nginx --create-namespace
+
 ```
 
 Confirm Ingress class was deployed and the ingress service is available.
@@ -282,7 +292,8 @@ helm repo add grafana https://grafana.github.io/helm-charts
 
 helm repo update
 
-helm upgrade --install grafana grafana/grafana --values 03_yaml/grafana-values.yaml --namespace grafana --create-namespace
+##Grafana Version 9.3.6, Helm Chart Version 6.50.6 
+helm upgrade --install grafana grafana/grafana --version 6.50.6 --values 03_yaml/grafana-values.yaml --namespace grafana --create-namespace
 ```
 
 If all is well, you should see following output:
@@ -398,7 +409,8 @@ Please note overide "--values 03_yaml/loki-values.yaml", This values files conta
 
 ```shell
 
-helm upgrade --install loki grafana/loki --values 03_yaml/loki-values.yaml --namespace grafana --create-namespace
+##Grafana Loki Version 2.7.2, Helm Chart Version 4.4.2  
+helm upgrade --install loki grafana/loki --version 4.4.2 --values 03_yaml/loki-values.yaml --namespace grafana --create-namespace
 
 ```
 
@@ -448,7 +460,8 @@ We already have grafana helm repo added to our local helm so we can just install
 
 ```shell
 
-helm upgrade --install promtail grafana/promtail --values 03_yaml/promtail-values.yaml --namespace grafana
+##Grafana Promtail Version 2.7.2, Helm Chart Version 6.8.2 
+helm upgrade --install promtail grafana/promtail --version 6.8.2  --values 03_yaml/promtail-values.yaml --namespace grafana
 
 ```
 
@@ -544,7 +557,9 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 
 helm repo update
 
-helm upgrade --install prometheus prometheus-community/prometheus
+##Prometheus Version v2.41.0, Helm Chart Version 6.8.2 
+helm upgrade --install prometheus prometheus-community/prometheus --version 19.3.3
+
 ```
 
 Note: On DockerDesktp we get error regarding the node exported, please execute the following to resolve the node exporter error if one is encountered.
@@ -666,7 +681,7 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 helm repo update
 
-helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --version 4.4.3 --namespace ingress-nginx --create-namespace
 
 kubectl create secret tls grafana-ingress-tls --key 02_tls/grafana_tls/grafana-key.pem --cert 02_tls/grafana_tls/grafana.pem --namespace grafana  
 
@@ -674,17 +689,17 @@ helm repo add grafana https://grafana.github.io/helm-charts
 
 helm repo update
 
-helm upgrade --install grafana grafana/grafana --values 03_yaml/grafana-values.yaml --namespace grafana --create-namespace
+helm upgrade --install grafana grafana/grafana --version 6.50.6 --values 03_yaml/grafana-values.yaml --namespace grafana --create-namespace
 
-helm upgrade --install loki grafana/loki --values 03_yaml/loki-values.yaml --namespace grafana --create-namespace
+helm upgrade --install loki grafana/loki --version 4.4.2 --values 03_yaml/loki-values.yaml --namespace grafana --create-namespace
 
-helm upgrade --install promtail grafana/promtail --values 03_yaml/promtail-values.yaml --namespace grafana
+helm upgrade --install promtail grafana/promtail --version 6.8.2  --values 03_yaml/promtail-values.yaml --namespace grafana
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 
 helm repo update
 
-helm upgrade --install prometheus prometheus-community/prometheus
+helm upgrade --install prometheus prometheus-community/prometheus --version 19.3.3
 
 kubectl patch ds prometheus-node-exporter --type "json" -p '[{"op": "remove", "path" : "/spec/template/spec/containers/0/volumeMounts/2/mountPropagation"}]'
 
@@ -703,7 +718,7 @@ kubectl apply -f 03_yaml/imageapi.yaml --namespace imageapi
 
 kubectl delete -f 03_yaml/imageapi.yaml --namespace imageapi
 
-kubectl delete secret tls imageapi-ingress-tls --namespace imageapi
+kubectl delete secret imageapi-ingress-tls --namespace imageapi
 
 kubectl delete namespace imageapi
 
@@ -717,7 +732,7 @@ helm uninstall grafana --namespace grafana
 
 helm uninstall ingress-nginx --namespace ingress-nginx
 
-kubectl delete secret tls grafana-ingress-tls --namespace grafana 
+kubectl delete secret grafana-ingress-tls --namespace grafana 
 
 kubectl delete -f 03_yaml/grafana-pv-pvc-minikube.yaml --namespace grafana
 

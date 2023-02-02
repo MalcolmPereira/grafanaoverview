@@ -1,40 +1,45 @@
-auth_enabled: true
-
 loki:
+  auth_enabled: true  
   commonConfig:
     replication_factor: 1
+  storage:
+    type: filesystem
+    filesystem:
+      chunks_directory: /var/loki/chunks
+      rules_directory: /var/loki/rules
+test:
+  enabled: false	  
 
+monitoring:
+  dashboards:
+    enabled: false
+  rules: 
+    enabled: false 
+    alerting: false
+  serviceMonitor:
+    enabled: false
+    metricsInstance:
+      enabled: false     
+  selfMonitoring:
+    enabled: false
+    grafanaAgent:
+      installOperator: false
+  lokiCanary:
+      enabled: false
+
+analytics:
+  reporting_enabled: false
+
+singleBinary:
+  replicas: 1
   persistence:
     enabled: true
-    type: pvc
-    accessModes:
-      - ReadWriteOnce
-    existingClaim: loki-volume-claim  
+    size: 5Gi
 
-resources:
+Resources:
   requests:
     cpu: 250m
     memory: 512Mi
   limits:
     cpu: 750m
     memory: 750Mi
-
-analytics:
-  reporting_enabled: false
-
-test:
-  enabled: false
-
-monitoring:
-  selfMonitoring:
-      enabled: false
-      grafanaAgent:
-        installOperator: false
-
-  serviceMonitor:
-      enabled: false
-      metricsInstance:
-        enabled: false    
-
-  lokiCanary:
-      enabled: false       

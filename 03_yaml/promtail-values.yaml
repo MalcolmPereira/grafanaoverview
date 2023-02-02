@@ -2,7 +2,8 @@ extraArgs:
   - -print-config-stderr=true
 config:
   logLevel: debug
-  lokiAddress: http://loki.grafana.svc.cluster.local:3100/loki/api/v1/push
+  clients:
+    - url: http://loki.grafana.svc.cluster.local:3100/loki/api/v1/push
   snippets:
     pipelineStages:
       - match:
